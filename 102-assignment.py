@@ -13,8 +13,11 @@
 """
 
 
-def register_team():
+def register_team(next_id):
     print('register_team')
+    team_name = input('What is the team name? ')
+    with open('teams.csv', 'a', encoding='utf-8') as teams:
+        teams.write(f'{next_id};{team_name}\n')
 
 
 def display_all_teams():
@@ -27,6 +30,11 @@ def display_all_teams():
 
 def add_result():
     print('add_result')
+    home = input('Who was the home team?')
+    away = input('Who was the away team?')
+    score = input(f'What was the score? ([{home} score]:[{away} score])')
+    #todo sprawdzenie, czy takie drużyny istnieją, czy wynik jest legalny (np nieujemny) itd.
+    #todo zapis wyniku do pliku
 
 
 def display_all_results():
@@ -48,7 +56,20 @@ def display_menu():
     print()
 
 
+def initialize(teams='teams.csv', results='results.csv'):
+    with open(teams, 'r', encoding='utf-8') as f:
+        for line in f:
+            pass
+        if line.startswith('id'):
+            return 1
+        last_id = int(line.strip().split(';')[0])
+        next_id = last_id + 1
+
+    return next_id
+
+
 def run():
+    next_id = initialize()
     while True:
         display_menu()
         try:
@@ -63,13 +84,15 @@ def run():
             elif user_choice == 3:
                 pass
             elif user_choice == 4:
-                pass
+                register_team(next_id)
+                next_id += 1
             elif user_choice == 5:
                 pass
             elif user_choice == 6:
                 return
             else:
                 pass
+
 
 if __name__ == '__main__':
     run()
