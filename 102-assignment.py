@@ -12,6 +12,12 @@
 6. Dopuszczamy tylko jedną drużynę o danej nazwie.
 """
 
+class TeamAlreadyRegisteredException(Exception):
+    pass
+
+class IllegalScoreException(Exception):
+    pass
+
 
 def register_team(next_id):
     print('register_team')
@@ -35,6 +41,8 @@ def add_result():
     score = input(f'What was the score? ([{home} score]:[{away} score])')
     #todo sprawdzenie, czy takie drużyny istnieją, czy wynik jest legalny (np nieujemny) itd.
     #todo zapis wyniku do pliku
+
+
 
 
 def display_all_results():
