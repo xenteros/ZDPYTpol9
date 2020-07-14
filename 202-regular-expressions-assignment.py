@@ -15,3 +15,9 @@ if __name__ == '__main__':
     regex3 = '.+[.]pl'
     regex4 = '.*[.]'
     regex5 = '([:;][)(pD])|(xD)'
+    regex6 = '([A-Z][a-z]*)+'   #UpperCamelCase
+    regex7 = '[a-z]+(_[a-z]+)*' #sneak_case
+
+    import re
+    words = re.findall(r'[a-z]+', 'Ala ma kota 123')
+    print(words)
