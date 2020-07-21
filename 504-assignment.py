@@ -79,12 +79,59 @@ class Meal(FileWritable):
         return [ingredients[id] for id in ids]
 
 
-class Order:
-    pass
+@dataclass
+class Cook(FileWritable):
+    id: int
+    first_name: str
+    last_name: str
+
+    @staticmethod
+    def file_name():
+        return 'cooks.csv'
+
+    @staticmethod
+    def from_csv_string(csv_string, sep=';', members=None):
+        splited = csv_string.strip().split(sep)
+        return Cook(int(splited[0]), splited[1], splited[2])
+
+    def to_csv_string(self, sep=';'):
+        return f'{self.id}{sep}{self.first_name}{sep}{self.last_name}'
 
 
-class Cook:
-    pass
+@dataclass
+class Order(FileWritable):
+    id: int
+    cook: Cook
+    meals: List[Meal]
+
+    @staticmethod
+    def file_name():
+        return 'orders.csv'
+
+    @staticmethod
+    def from_csv_string(csv_string, sep=';', members=None):
+        cooks = members['cooks']
+        meals = members['meals']
+
+        cooks_dict = {cook.id: cook for cook in cooks}
+        meals_dict = {meal.id: meal for meal in meals}
+
+        splited = csv_string.strip().split(sep)
+
+        return Order(
+            int(splited[0]),
+            cooks[int(splited[1])],
+            Order.__map_meals(splited[2], meals)
+        )
+
+    def to_csv_string(self, sep=';'):
+        meals = map(lambda x: str(x.id), self.meals)
+        return f'{self.id}{sep}{self.cook.id}{sep}{meals}'
+
+    @staticmethod
+    def __map_meals(ids_string: str, meals: Dict[int, Meal]):
+        ids = map(int, ids_string.split(','))
+        return [meals[id] for id in ids]
 
 
 def read_ingredients():
@@ -96,10 +143,12 @@ def read_meals():
     return list(read_csv_file(Meal, members=ingredients))
 
 
-def write_ingredients(ingredients: List[Ingredient]):
-    with open(Ingredient.FILE_NAME, 'w', encoding='utf-8') as f:
-        for ingredient in ingredients:
-            f.write(f'{ingredient.id};{ingredient.name}\n')
+def read_orders():
+    pass
+
+
+def read_cooks():
+    pass
 
 
 def write_csv_file(cls: Type[FileWritable], objects: List[FileWritable], encoding='utf-8', sep=';'):
