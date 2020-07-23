@@ -74,3 +74,8 @@ if __name__ == '__main__':
     print(users_names(users))
     print(users_names_better(users))
     print(warszawiacy(users))
+
+    strings = 'Ala ma kota a sierotka ma rysia'.split(' ')
+    print(strings)
+    print([len(s) for s in strings])
+    print({len(s) for s in strings})
